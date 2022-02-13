@@ -7,7 +7,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "matugr.sample"
+        applicationId "com.matugr.sample"
         minSdk 26
         targetSdk 31
         versionCode 1
