@@ -10,7 +10,7 @@ import javax.inject.Inject
  *
  * See README: Authorization Request
  */
-class AuthUrlBuilder @Inject constructor() {
+internal class AuthUrlBuilder @Inject constructor() {
     fun generate(baseUrl: String,
                  authorizationNetworkingRequest: AuthorizationNetworkingRequest,
                  uriParameterLocation: UriCharacter.ParametersIdentifier,

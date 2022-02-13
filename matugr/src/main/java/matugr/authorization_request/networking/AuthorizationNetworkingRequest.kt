@@ -6,7 +6,7 @@ package matugr.authorization_request.networking
  *
  * See README: Authorization Request
  */
-data class AuthorizationNetworkingRequest(
+internal data class AuthorizationNetworkingRequest(
     val clientId: String,
     val responseType: ResponseType,
     val codeChallenge: String,

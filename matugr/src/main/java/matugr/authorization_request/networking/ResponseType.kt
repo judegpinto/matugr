@@ -8,6 +8,6 @@ import matugr.common.oauth.CODE
  *
  * See README: Response Type
  */
-enum class ResponseType(val jsonValue: String) {
+internal enum class ResponseType(val jsonValue: String) {
     @Json(name = CODE) Code(CODE)
 }

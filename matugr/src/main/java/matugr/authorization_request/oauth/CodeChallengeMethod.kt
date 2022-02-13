@@ -1,7 +1,7 @@
 package matugr.authorization_request.oauth
 
 /**
- * Types of challenges allowed by OAuth
+ * Types of challenges designated by OAuth
  *
  * See README: Code Challenge Method
  */
