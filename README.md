@@ -23,6 +23,9 @@ https://datatracker.ietf.org/doc/html/rfc7636#section-4
 Response Type:
 https://www.rfc-editor.org/rfc/rfc6749#section-3.1.1
 
+Code Challenge:
+https://datatracker.ietf.org/doc/html/rfc7636#section-4.2
+
 Code Challenge Method:
 https://datatracker.ietf.org/doc/html/rfc7636#section-4.2
 
