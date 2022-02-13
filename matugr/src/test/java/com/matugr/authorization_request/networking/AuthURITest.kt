@@ -1,6 +1,6 @@
 package com.matugr.authorization_request.networking
 
-import com.matugr.common.UriCharacter
+import com.matugr.common.external.UriCharacter
 import com.matugr.common.oauth.CODE
 import org.junit.Assert.assertEquals
 import org.junit.Test

@@ -1,4 +1,4 @@
-package com.matugr.common
+package com.matugr.common.external
 
 /**
  * Class that defines a point in the uri. Used to designate where to find uri parameters.

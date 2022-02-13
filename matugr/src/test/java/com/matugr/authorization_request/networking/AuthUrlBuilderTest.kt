@@ -1,7 +1,7 @@
 package com.matugr.authorization_request.networking
 
 import com.matugr.authorization_request.oauth.CodeChallengeMethod
-import com.matugr.common.UriCharacter
+import com.matugr.common.external.UriCharacter
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Test
