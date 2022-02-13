@@ -1,4 +1,4 @@
-package matugr.authorization_request.domain
+package matugr.authorization_request.external.option
 
 /**
  * Client has the following options to dictate whether or not, and how, the state in the

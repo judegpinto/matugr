@@ -1,7 +1,7 @@
 package matugr.authorization_request.oauth
 
 import java.util.Base64
-import matugr.authorization_request.domain.CodeVerifierOption
+import matugr.authorization_request.external.option.CodeVerifierOption
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import javax.inject.Inject
