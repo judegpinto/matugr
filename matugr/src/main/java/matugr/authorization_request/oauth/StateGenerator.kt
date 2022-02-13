@@ -1,6 +1,6 @@
 package matugr.authorization_request.oauth
 
-import matugr.authorization_request.StateOption
+import matugr.authorization_request.domain.StateOption
 import javax.inject.Inject
 import javax.inject.Named
 

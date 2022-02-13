@@ -1,4 +1,4 @@
-package matugr.authorization_request
+package matugr.authorization_request.domain
 
 import matugr.common.oauth.AuthorizationErrorCodeBody
 

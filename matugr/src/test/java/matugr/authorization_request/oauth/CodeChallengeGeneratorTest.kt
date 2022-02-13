@@ -1,7 +1,7 @@
 package matugr.authorization_request.oauth
 
 import io.mockk.*
-import matugr.authorization_request.CodeVerifierOption
+import matugr.authorization_request.domain.CodeVerifierOption
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

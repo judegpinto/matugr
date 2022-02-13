@@ -2,7 +2,7 @@ package matugr.authorization_request.oauth
 
 import io.mockk.every
 import io.mockk.mockk
-import matugr.authorization_request.StateOption
+import matugr.authorization_request.domain.StateOption
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
