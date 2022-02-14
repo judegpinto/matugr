@@ -2,6 +2,9 @@ package com.matugr.authorization_request.external
 
 import com.matugr.common.oauth.AuthorizationErrorCodeBody
 
+/**
+ * Result container for a client authorization request
+ */
 sealed class AuthorizationResult {
     data class Success(val code: String, val codeVerifier: String): AuthorizationResult()
     sealed class Error: AuthorizationResult() {
