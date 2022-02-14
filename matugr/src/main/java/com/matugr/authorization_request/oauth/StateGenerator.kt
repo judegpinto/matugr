@@ -1,10 +1,9 @@
 package com.matugr.authorization_request.oauth
 
 import com.matugr.authorization_request.external.option.StateOption
+import com.matugr.di.state_length
 import javax.inject.Inject
 import javax.inject.Named
-
-const val state_length = "16"
 
 /**
  * Generates a state based on client option

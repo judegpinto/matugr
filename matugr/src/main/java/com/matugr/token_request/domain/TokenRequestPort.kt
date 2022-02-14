@@ -6,7 +6,7 @@ import com.matugr.token_request.external.TokenResult
 /**
  * Domain class that separates token requests from other OAuth-related requests
  */
-internal interface TokenRequestPort {
+interface TokenRequestPort {
     suspend fun performTokenRequest(tokenUrl: String,
                                     clientId: String,
                                     redirectUri: String,
