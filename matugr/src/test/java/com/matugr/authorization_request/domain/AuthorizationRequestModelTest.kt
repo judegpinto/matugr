@@ -8,7 +8,7 @@ import com.matugr.authorization_request.oauth.CodeChallengeMethod
 import com.matugr.authorization_request.oauth.CodeVerifierContainer
 import com.matugr.authorization_request.oauth.CodeVerifierContainer.Companion.MIN_LENGTH
 import com.matugr.authorization_request.oauth.StateGenerator
-import com.matugr.authorization_request.tools.CoroutineTestRule
+import com.matugr.tools.CoroutineTestRule
 import com.matugr.common.external.UriCharacter
 import com.matugr.common.external.UrlLauncherPort
 import io.mockk.every

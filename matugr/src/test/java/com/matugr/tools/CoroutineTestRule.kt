@@ -1,4 +1,4 @@
-package com.matugr.authorization_request.tools
+package com.matugr.tools
 
 import com.matugr.common.tools.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
