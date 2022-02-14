@@ -1,7 +1,5 @@
-package com.matugr.token_request
+package com.matugr.token_request.networking
 
-import com.matugr.token_request.networking.OkHttpTokenNetworking
-import com.matugr.token_request.networking.TokenNetworkingResponse
 import com.matugr.tools.CoroutineTestRule
 import io.mockk.every
 import io.mockk.mockk
