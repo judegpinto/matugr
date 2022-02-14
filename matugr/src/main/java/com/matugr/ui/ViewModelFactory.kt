@@ -7,7 +7,7 @@ import com.matugr.common.tools.DispatcherProvider
 import java.lang.IllegalStateException
 import javax.inject.Inject
 
-class ViewModelFactory @Inject constructor(
+internal class ViewModelFactory @Inject constructor(
     private val authRedirectPort: AuthRedirectPort,
     private val dispatcherProvider: DispatcherProvider
 ): ViewModelProvider.Factory {

@@ -12,7 +12,7 @@ import com.squareup.moshi.JsonClass
  * See README: Token Response
  */
 @JsonClass(generateAdapter = true)
-data class TokenResponseBody(
+internal data class TokenResponseBody(
     @Json(name = ACCESS_TOKEN) val accessToken: String,
     @Json(name = TOKEN_TYPE) val tokenType: String,
     @Json(name = REFRESH_TOKEN) val refreshToken: String?,

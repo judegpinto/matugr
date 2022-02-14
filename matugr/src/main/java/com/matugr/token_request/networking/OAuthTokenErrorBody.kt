@@ -12,7 +12,7 @@ import com.squareup.moshi.JsonClass
  * See README: Token Error
  */
 @JsonClass(generateAdapter = true)
-data class OAuthTokenErrorBody(
+internal data class OAuthTokenErrorBody(
     @Json(name = "error") val oAuthErrorCodeBody: TokenErrorCodeBody,
     @Json(name = "error_description") val errorDescription: String?,
     @Json(name = "error_uri") val errorUri: String?

@@ -3,7 +3,7 @@ package com.matugr.token_request.networking
 /**
  * Networking API that separates OAuth-specific logic from networking implementation
  */
-interface TokenNetworking {
+internal interface TokenNetworking {
     suspend fun tokenRequestWithCode(
         tokenUrl: String,
         authorizationCode: String,
