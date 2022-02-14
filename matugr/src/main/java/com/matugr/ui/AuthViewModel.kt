@@ -10,6 +10,10 @@ import com.matugr.common.tools.DispatcherProvider
 import kotlinx.coroutines.launch
 import java.net.URI
 
+/**
+ * Pairs with the matugr redirect activity to process the response (once) and illicit action when
+ * processing is finished.
+ */
 class AuthViewModel(
     private val authRedirectPort: AuthRedirectPort,
     private val dispatcherProvider: DispatcherProvider

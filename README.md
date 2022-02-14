@@ -33,3 +33,12 @@ State:
 https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.1
 https://datatracker.ietf.org/doc/html/rfc6749#section-10.12
 
+Token Request:
+https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.3
+
+Token Response:
+https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.4
+https://datatracker.ietf.org/doc/html/rfc6749#section-5.1
+
+Token Error:
+https://datatracker.ietf.org/doc/html/rfc6749#section-5.2
