@@ -8,7 +8,7 @@ import com.matugr.common.external.UrlLauncherPort
  * Domain class that separates authorization requests from other OAuth-related requests
  */
 interface AuthorizationRequestPort {
-    suspend fun performAuthorizationRequest(authorizationRequestExternal: AuthorizationRequest,
+    suspend fun performAuthorizationRequest(authorizationRequest: AuthorizationRequest,
                                             urlLauncherPort: UrlLauncherPort
     ): AuthorizationResult
     /**
