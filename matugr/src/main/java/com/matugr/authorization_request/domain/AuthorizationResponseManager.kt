@@ -11,31 +11,21 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Delegate for authorization response processing.
+ * Delegate for authorization response processing. In turn this delegates to
  *
  * DI Scoped so the same instance stores the pending authorization and process the response
  */
 @Singleton
 internal class AuthorizationResponseManager @Inject constructor(
-    private val authRequestConfiguration: AuthRequestConfiguration,
+    private val authorizationResultManufacturer: AuthorizationResultManufacturer
 ): AuthRedirectPort, PendingAuthorizationStore {
 
     private var pendingAuthorization: PendingAuthorization? = null
 
     override fun handleRedirectUri(uri: URI) {
-        val params = AuthURI(uri).getParams(authRequestConfiguration.parametersIdentifier)
-        Timber.d(javaClass.simpleName, "redirect uri parameters: $params")
-
-        val code = params[CODE]
-        val receivedState = params[STATE]
-
         pendingAuthorization?.apply {
             if (authorizationContinuation.isCancelled) return
-            val authorizationResponse = when {
-                code == null -> AuthorizationResult.Error.IllegalStateError.NoCodeInAuthorizationResponse(uri.toASCIIString())
-                state != receivedState -> AuthorizationResult.Error.IllegalStateError.StateDoesNotMatch(receivedState, state)
-                else -> AuthorizationResult.Success(code, codeVerifier)
-            }
+            val authorizationResponse = authorizationResultManufacturer.processAuthorizationUri(uri, state, codeVerifier)
             authorizationContinuation.resume(authorizationResponse, null)
         }
         pendingAuthorization = null

@@ -79,7 +79,7 @@ class AuthDemoViewModel @Inject constructor(
 
     private fun processUiToken(uiToken: UiToken) {
         viewStateFlow.value = when(uiToken) {
-            is UiToken.AuthorizationError -> UiViewState.DisplayError(resources.getString(R.string.error_authorization))
+            is UiToken.AuthorizationError -> UiViewState.DisplayError("${resources.getString(R.string.error_authorization)}: ${uiToken.detail}")
             is UiToken.NoRefreshToken -> UiViewState.DisplayError(resources.getString(R.string.error_no_refresh_token, formatDate(uiToken.expiry)))
             is UiToken.TokenError -> UiViewState.DisplayError(resources.getString(R.string.error_invalid_fetched_token, uiToken.errorAsString))
             is UiToken.TokenSuccess -> UiViewState.DisplayToken(resources.getString(R.string.token_status_valid), formatDate(uiToken.expiry))

@@ -46,7 +46,7 @@ class AuthDemoModel @Inject constructor(
                 }
                 is AuthorizationResult.Error -> {
                     Log.i(javaClass.simpleName, "error: $authorizationResponse")
-                    UiToken.AuthorizationError
+                    UiToken.AuthorizationError(authorizationResponse.toString())
                 }
             }
         }

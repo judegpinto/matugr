@@ -1,6 +1,6 @@
 package com.matugr.di
 
-import com.matugr.authorization_request.domain.AuthRedirectPort
+import com.matugr.authorization_request.domain.*
 import com.matugr.authorization_request.domain.AuthorizationResponseManager
 import com.matugr.authorization_request.domain.PendingAuthorizationStore
 import com.matugr.common.external.AuthModel
@@ -29,4 +29,9 @@ internal abstract class AuthModule {
     abstract fun provideTokenNetworking(
         okHttpTokenNetworking: OkHttpTokenNetworking
     ): TokenNetworking
+
+    @Binds
+    abstract fun provideAuthorizationResultManufacturer(
+        authorizationResultManufacturerImpl: AuthorizationResultManufacturerImpl
+    ): AuthorizationResultManufacturer
 }
