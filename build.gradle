@@ -1,6 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlin_version = "1.5.31"
+    ext.kotlin_version = "1.6.10"
     ext.dagger_version = '2.38.1'
     ext.moshi_version = '1.13.0'
     ext.coroutines_version = '1.6.0'
@@ -8,6 +8,7 @@ buildscript {
     ext.hilt_version = '2.38.1'
     ext.room_version = "2.4.1"
     ext.secrets_version = "2.0.0"
+    ext.compose_version = "1.1.0"
 
     repositories {
         google()

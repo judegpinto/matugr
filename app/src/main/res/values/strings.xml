@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">matugr</string>
+    <string name="app_name">MATUGR</string>
     <!--Display Token-->
+    <string name="label_token_status">Token Status</string>
+    <string name="label_token_expiry">Token Expiry</string>
+    <string name="button_fetch_token">Fetch New Token</string>
+    <string name="button_logout">Logout</string>
     <string name="token_status_valid">Valid</string>
     <string name="token_date_format">ddMMMyyyy h:mm:ssa</string>
     <!--Display Error-->
@@ -9,6 +13,13 @@
     <string name="error_invalid_fetched_token">Invalid Token Received: %1$s</string>
     <string name="error_invalid_local_token">Invalid Local Token</string>
     <!--Loading-->
+    <string name="loading_general_text">Please wait</string>
     <string name="loading_local_token">Fetching Cached Token</string>
     <string name="loading_fetch_new_token">Fetching New Token</string>
+    <string name="authorizing">Logging In…To Cancel, Click Below.</string>
+    <!--Idle-->
+    <string name="idle_state">There is no Token stored locally.\nLogin to obtain a token.</string>
+    <!--Login-->
+    <string name="button_login">Login</string>
+    <string name="button_cancel_login">Cancel Login</string>
 </resources>

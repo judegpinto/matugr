@@ -32,6 +32,12 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion "$compose_version"
+    }
 }
 
 dependencies {
@@ -63,6 +69,11 @@ dependencies {
     // Room
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    // Compose
+    implementation "androidx.compose.compiler:compiler:$compose_version"
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation "androidx.compose.material:material:$compose_version"
 
     // Test
     testImplementation 'junit:junit:4.13.2'
