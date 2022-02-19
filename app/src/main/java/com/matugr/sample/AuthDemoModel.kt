@@ -16,6 +16,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+/**
+ * Core business logic for the sample app. Handles authorization and token requests, saving and
+ * retrieving local tokens, as well as processing any corresponding errors.
+ */
 class AuthDemoModel @Inject constructor(
     private val authDemoProperties: AuthDemoProperties,
     private val requestPort: RequestPort,

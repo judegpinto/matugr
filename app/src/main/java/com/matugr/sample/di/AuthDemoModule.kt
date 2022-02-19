@@ -22,6 +22,10 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
+/**
+ * The only Hilt-leveraged module in the sample app. Contains dependency-injected items. Other
+ * items that are injected may not be here, e.g. ViewModels have inject-annotated constructors.
+ */
 @Module
 @InstallIn(ViewModelComponent::class, ActivityComponent::class)
 class AuthDemoModule {

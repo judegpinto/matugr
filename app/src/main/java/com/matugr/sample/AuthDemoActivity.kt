@@ -21,6 +21,9 @@ import com.matugr.sample.data.ui.ViewAction
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+/**
+ * Singular, compose-based activity for the sample app. Driven by [UiViewState].
+ */
 @ExperimentalUnitApi
 @AndroidEntryPoint
 class AuthDemoActivity : AppCompatActivity() {

@@ -5,7 +5,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Delegate for authorization response processing. In turn this delegates to
+ * Delegate for authorization response processing. In turn this delegates the response
+ * processing to [AuthorizationResultManufacturer]
  *
  * DI Scoped so the same instance stores the pending authorization and process the response
  */

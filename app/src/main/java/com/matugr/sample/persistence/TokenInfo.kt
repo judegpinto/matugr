@@ -3,6 +3,10 @@ package com.matugr.sample.persistence
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * Room data class that holds all the (relevant) information to be persisted locally from a token
+ * response.
+ */
 @Entity
 data class TokenInfo(
     val accessToken: String,

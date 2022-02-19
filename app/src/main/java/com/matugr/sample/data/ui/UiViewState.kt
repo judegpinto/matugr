@@ -1,6 +1,9 @@
 package com.matugr.sample.data.ui
 
-sealed class UiViewState() {
+/**
+ * All the various states that can be displayed to the UI itself, including any data.
+ */
+sealed class UiViewState {
     object Idle: UiViewState()
     object Authorizing: UiViewState()
     data class DisplayError(val error: String): UiViewState()

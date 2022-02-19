@@ -16,6 +16,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
+/**
+ * Core view logic for the sample app. Delegates UI events to the business layer and processes the
+ * data received from the business layer for the UI.
+ */
 @HiltViewModel
 class AuthDemoViewModel @Inject constructor(
     private val authDemoModel: AuthDemoModel,
