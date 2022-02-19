@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">matugr</string>
+    <!--Display Token-->
+    <string name="token_status_valid">Valid</string>
+    <string name="token_date_format">ddMMMyyyy h:mm:ssa</string>
+    <!--Display Error-->
+    <string name="error_authorization">Authorization Failed</string>
+    <string name="error_no_refresh_token">No Refresh Token Stored. Current Local Token expires in: %1$s</string>
+    <string name="error_invalid_fetched_token">Invalid Token Received: %1$s</string>
+    <string name="error_invalid_local_token">Invalid Local Token</string>
+    <!--Loading-->
+    <string name="loading_local_token">Fetching Cached Token</string>
+    <string name="loading_fetch_new_token">Fetching New Token</string>
 </resources>
