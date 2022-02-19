@@ -13,8 +13,7 @@ import java.net.URI
 
 class AuthorizationResponseManagerTest {
 
-    private val authRequestConfiguration: AuthRequestConfiguration =
-        AuthRequestConfiguration(UriCharacter.ParametersIdentifier.Fragment)
+    private val authorizationResultManufacturer: AuthorizationResultManufacturer = mockk()
     private val continuation: CancellableContinuation<AuthorizationResult> =
         mockk(relaxed = true)
     private val validState: String = "ValidState"
@@ -27,17 +26,24 @@ class AuthorizationResponseManagerTest {
 
     @Before
     fun setup() {
-        authorizationResponseManager = AuthorizationResponseManager(authRequestConfiguration)
+        authorizationResponseManager = AuthorizationResponseManager(authorizationResultManufacturer)
     }
 
     @Test
-    fun `when valid authorization parameters exist in uri then success returned`() {
+    fun `given stored authorization result when valid redirect uri is handled then success returned`() {
+        // given
         every { continuation.isCancelled } returns false
         val pendingAuthorization = PendingAuthorization(continuation, validCodeVerifier, validState)
+        every {
+            authorizationResultManufacturer.processAuthorizationUri(
+                validRedirectUri, validState, validCodeVerifier)
+        } returns AuthorizationResult.Success(validAuthorizationCode, validCodeVerifier)
 
+        // when
         authorizationResponseManager.storePendingAuthorization(pendingAuthorization)
         authorizationResponseManager.handleRedirectUri(validRedirectUri)
 
+        // then
         verify {
             pendingAuthorization.authorizationContinuation.resume(
                 AuthorizationResult.Success(validAuthorizationCode, validCodeVerifier),
@@ -47,13 +53,18 @@ class AuthorizationResponseManagerTest {
     }
 
     @Test
-    fun `when invalid state exists in uri then error returned`() {
+    fun `when error state is returned then error propagated`() {
+        // given
         every { continuation.isCancelled } returns false
         val invalidState = "invalid_state"
         val invalidStateRedirectUri: URI =
             URI.create("testauth://#state=$invalidState&code=$validAuthorizationCode")
         val pendingAuthorization =
             PendingAuthorization(continuation, validCodeVerifier, validState)
+        every {
+            authorizationResultManufacturer.processAuthorizationUri(
+                invalidStateRedirectUri, validState, validCodeVerifier)
+        } returns AuthorizationResult.Error.IllegalStateError.StateDoesNotMatch(invalidState, validState)
 
         authorizationResponseManager.storePendingAuthorization(pendingAuthorization)
         authorizationResponseManager.handleRedirectUri(invalidStateRedirectUri)
@@ -61,26 +72,6 @@ class AuthorizationResponseManagerTest {
         verify {
             pendingAuthorization.authorizationContinuation.resume(
                 AuthorizationResult.Error.IllegalStateError.StateDoesNotMatch(invalidState, validState),
-                null
-            )
-        }
-    }
-
-    @Test
-    fun `when no authorization code exists in uri then error returned`() {
-        every { continuation.isCancelled } returns false
-        val redirectUriWithoutAuthorizationCode: String = "testauth://#no_code_in_uri"
-        val pendingAuthorization =
-            PendingAuthorization(continuation, validCodeVerifier, validState)
-
-        authorizationResponseManager.storePendingAuthorization(pendingAuthorization)
-        authorizationResponseManager.handleRedirectUri(
-            URI.create(redirectUriWithoutAuthorizationCode)
-        )
-
-        verify {
-            pendingAuthorization.authorizationContinuation.resume(
-                AuthorizationResult.Error.IllegalStateError.NoCodeInAuthorizationResponse(redirectUriWithoutAuthorizationCode),
                 null
             )
         }

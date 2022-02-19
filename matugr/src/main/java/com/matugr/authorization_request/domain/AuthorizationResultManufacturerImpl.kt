@@ -38,7 +38,7 @@ class AuthorizationResultManufacturerImpl @Inject constructor(
         val receivedState = params[STATE]
 
         // Check for illegal state
-        if(code == null) return AuthorizationResult.Error.IllegalStateError.NoCodeInAuthorizationResponse(uri.toASCIIString())
+        if(code == null) return AuthorizationResult.Error.IllegalStateError.NoCodeInAuthorizationResponse(uri.toString())
         if(state != receivedState) return AuthorizationResult.Error.IllegalStateError.StateDoesNotMatch(receivedState, state)
 
         // Success!

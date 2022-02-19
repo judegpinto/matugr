@@ -1,11 +1,5 @@
 package com.matugr.authorization_request.domain
 
-import com.matugr.authorization_request.external.AuthRequestConfiguration
-import com.matugr.authorization_request.external.AuthorizationResult
-import com.matugr.authorization_request.networking.AuthURI
-import com.matugr.common.oauth.CODE
-import com.matugr.common.oauth.STATE
-import timber.log.Timber
 import java.net.URI
 import javax.inject.Inject
 import javax.inject.Singleton
