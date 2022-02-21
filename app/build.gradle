@@ -40,6 +40,10 @@ android {
     }
 }
 
+secrets {
+    defaultPropertiesFileName = "secrets.defaults.properties"
+}
+
 dependencies {
 
     implementation project(':matugr')
