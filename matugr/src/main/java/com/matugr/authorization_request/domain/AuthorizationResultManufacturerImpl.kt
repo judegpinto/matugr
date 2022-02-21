@@ -1,7 +1,6 @@
 package com.matugr.authorization_request.domain
 
-import com.matugr.authorization_request.external.AuthRequestConfiguration
-import com.matugr.authorization_request.external.AuthorizationOAuthErrorCode
+import com.matugr.authorization_request.external.AuthorizationRequestConfiguration
 import com.matugr.authorization_request.external.AuthorizationResult
 import com.matugr.authorization_request.external.convertFromAuthorizationOAuthNetworkingError
 import com.matugr.authorization_request.networking.AuthURI
@@ -11,14 +10,14 @@ import java.net.URI
 import javax.inject.Inject
 
 class AuthorizationResultManufacturerImpl @Inject constructor(
-    private val authRequestConfiguration: AuthRequestConfiguration
+    private val authorizationRequestConfiguration: AuthorizationRequestConfiguration
 ): AuthorizationResultManufacturer {
     /**
      * Built like an "unhappy path". Check one by one any known error states that may exist along
      * the way, and at the end, no errors must exist so return a success response.
      */
     override fun processAuthorizationUri(uri: URI, state: String?, codeVerifier: String): AuthorizationResult {
-        val params = AuthURI(uri).getParams(authRequestConfiguration.parametersIdentifier)
+        val params = AuthURI(uri).getParams(authorizationRequestConfiguration.parametersIdentifier)
         Timber.d(javaClass.simpleName, "redirect uri parameters: $params")
 
         // check for oauth error

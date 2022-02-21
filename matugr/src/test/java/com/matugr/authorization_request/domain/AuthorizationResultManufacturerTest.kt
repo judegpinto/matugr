@@ -1,6 +1,6 @@
 package com.matugr.authorization_request.domain
 
-import com.matugr.authorization_request.external.AuthRequestConfiguration
+import com.matugr.authorization_request.external.AuthorizationRequestConfiguration
 import com.matugr.authorization_request.external.AuthorizationOAuthErrorCode
 import com.matugr.authorization_request.external.AuthorizationResult
 import com.matugr.common.external.UriCharacter
@@ -10,7 +10,7 @@ import java.net.URI
 
 class AuthorizationResultManufacturerTest {
 
-    private val authRequestConfiguration = AuthRequestConfiguration(UriCharacter.ParametersIdentifier.Query)
+    private val authRequestConfiguration = AuthorizationRequestConfiguration(UriCharacter.ParametersIdentifier.Query)
     private val authorizationResultManufacturer: AuthorizationResultManufacturer =
         AuthorizationResultManufacturerImpl(authRequestConfiguration)
 

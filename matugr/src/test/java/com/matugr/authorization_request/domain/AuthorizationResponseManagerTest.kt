@@ -1,8 +1,6 @@
 package com.matugr.authorization_request.domain
 
-import com.matugr.authorization_request.external.AuthRequestConfiguration
 import com.matugr.authorization_request.external.AuthorizationResult
-import com.matugr.common.external.UriCharacter
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

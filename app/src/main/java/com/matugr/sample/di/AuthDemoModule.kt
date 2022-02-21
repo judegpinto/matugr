@@ -3,7 +3,7 @@ package com.matugr.sample.di
 import android.content.Context
 import android.content.res.Resources
 import androidx.room.Room
-import com.matugr.authorization_request.external.AuthRequestConfiguration
+import com.matugr.authorization_request.external.AuthorizationRequestConfiguration
 import com.matugr.common.external.AuthAdapterFactory
 import com.matugr.common.external.RequestPort
 import com.matugr.common.external.UriCharacter
@@ -48,8 +48,8 @@ class AuthDemoModule {
     }
 
     @Provides
-    fun provideAuthConfiguration(): AuthRequestConfiguration {
-        return AuthRequestConfiguration(UriCharacter.ParametersIdentifier.Query)
+    fun provideAuthConfiguration(): AuthorizationRequestConfiguration {
+        return AuthorizationRequestConfiguration(UriCharacter.ParametersIdentifier.Query)
     }
 
     @Provides
@@ -67,8 +67,8 @@ class AuthDemoModule {
     }
 
     @Provides
-    fun provideAuthPort(authRequestConfiguration: AuthRequestConfiguration, okHttpClient: OkHttpClient): RequestPort {
-        return AuthAdapterFactory().createSingletonRequestPort(authRequestConfiguration, okHttpClient, R.layout.auth_loading)
+    fun provideAuthPort(authorizationRequestConfiguration: AuthorizationRequestConfiguration, okHttpClient: OkHttpClient): RequestPort {
+        return AuthAdapterFactory().createSingletonRequestPort(authorizationRequestConfiguration, okHttpClient, R.layout.auth_loading)
     }
 
     @Provides

@@ -1,6 +1,6 @@
 package com.matugr.di
 
-import com.matugr.authorization_request.external.AuthRequestConfiguration
+import com.matugr.authorization_request.external.AuthorizationRequestConfiguration
 import com.matugr.common.external.RequestPort
 import com.matugr.ui.AuthActivity
 import dagger.BindsInstance
@@ -22,7 +22,7 @@ internal interface AuthComponent {
         fun authLayout(layout: Int?): Builder
 
         @BindsInstance
-        fun authConfiguration(authRequestConfiguration: AuthRequestConfiguration): Builder
+        fun authConfiguration(authorizationRequestConfiguration: AuthorizationRequestConfiguration): Builder
 
         @BindsInstance
         fun okHttpClient(okHttpClient: OkHttpClient?): Builder
