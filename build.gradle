@@ -9,10 +9,14 @@ buildscript {
     ext.room_version = "2.4.1"
     ext.secrets_version = "2.0.0"
     ext.compose_version = "1.1.0"
+    ext.maven_publish_version = "1.1.0"
 
     repositories {
         google()
         mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.4"
@@ -23,9 +27,15 @@ buildscript {
 
         // Secrets
         classpath "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:$secrets_version"
+
+        // Maven Publish
+        classpath "io.github.gradle-nexus:publish-plugin:$maven_publish_version"
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+apply plugin: 'io.github.gradle-nexus.publish-plugin'
+apply from: "${rootDir}/scripts/publish-root.gradle"
