@@ -21,6 +21,11 @@ The consuming client is responsible for:
 
 ## Getting Started
 
+### Gradle Setup
+```
+implementation 'io.github.judegpinto:matugr:0.1.0'
+```
+
 ### Required Property Setup (Sample App only)
 The sample app uses a secrets plugin to pull local properties to be leveraged by the BuildConfig
 and the AndroidManifest.
