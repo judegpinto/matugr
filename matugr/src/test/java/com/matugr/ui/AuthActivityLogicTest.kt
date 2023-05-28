@@ -39,6 +39,15 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
+/**
+ * The nature of the Android framework requires redirects to happen via [android.app.Activity].
+ * Therefore an Activity is required to receive the authorization redirect.
+ * However, managing that Activity requires some logic.
+ * These tests capture the logic required in the Activity.
+ *
+ * If possible, these can be moved to an Espresso test, but they should be captured in the
+ * Actions workflow.
+ */
 @RunWith(AndroidJUnit4::class)
 class AuthActivityLogicTest {
     private val testUri: Uri = mockk()
@@ -54,7 +63,7 @@ class AuthActivityLogicTest {
 
     @Before
     fun before() {
-        // connect AuthActivity ==> AuthViewModel. refactor these tests to move away mocking framework classes
+        // connect AuthActivity ==> AuthViewModel
         mockkStatic(ViewModelProviders::class)
         val viewModelProvider: ViewModelProvider = mockk()
         every { ViewModelProviders.of(any<FragmentActivity>(), viewModelFactory) } returns viewModelProvider
