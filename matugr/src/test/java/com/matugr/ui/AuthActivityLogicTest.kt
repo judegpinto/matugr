@@ -18,7 +18,10 @@ package com.matugr.ui
 
 import android.content.Intent
 import android.net.Uri
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -36,6 +39,15 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
+/**
+ * The nature of the Android framework requires redirects to happen via [android.app.Activity].
+ * Therefore an Activity is required to receive the authorization redirect.
+ * However, managing that Activity requires some logic.
+ * These tests capture the logic required in the Activity.
+ *
+ * If possible, these can be moved to an Espresso test, but they should be captured in the
+ * Actions workflow.
+ */
 @RunWith(AndroidJUnit4::class)
 class AuthActivityLogicTest {
     private val testUri: Uri = mockk()
@@ -51,7 +63,11 @@ class AuthActivityLogicTest {
 
     @Before
     fun before() {
-        every { viewModelFactory.hint(AuthViewModel::class).create(AuthViewModel::class.java) } returns authViewModel
+        // connect AuthActivity ==> AuthViewModel
+        mockkStatic(ViewModelProviders::class)
+        val viewModelProvider: ViewModelProvider = mockk()
+        every { ViewModelProviders.of(any<FragmentActivity>(), viewModelFactory) } returns viewModelProvider
+        every { viewModelProvider[AuthViewModel::class.java] } returns authViewModel
 
         mockkObject(AuthAdapterFactory)
         every { AuthAdapterFactory.getComponent() } returns externalAuthComponent
@@ -66,6 +82,7 @@ class AuthActivityLogicTest {
     @After
     fun after() {
         unmockkAll()
+        unmockkStatic(ViewModelProviders::class)
     }
 
     @Test
