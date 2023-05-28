@@ -18,7 +18,10 @@ package com.matugr.ui
 
 import android.content.Intent
 import android.net.Uri
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -51,7 +54,11 @@ class AuthActivityLogicTest {
 
     @Before
     fun before() {
-        every { viewModelFactory.hint(AuthViewModel::class).create(AuthViewModel::class.java) } returns authViewModel
+        // connect AuthActivity ==> AuthViewModel. refactor these tests to move away mocking framework classes
+        mockkStatic(ViewModelProviders::class)
+        val viewModelProvider: ViewModelProvider = mockk()
+        every { ViewModelProviders.of(any<FragmentActivity>(), viewModelFactory) } returns viewModelProvider
+        every { viewModelProvider[AuthViewModel::class.java] } returns authViewModel
 
         mockkObject(AuthAdapterFactory)
         every { AuthAdapterFactory.getComponent() } returns externalAuthComponent
@@ -66,6 +73,7 @@ class AuthActivityLogicTest {
     @After
     fun after() {
         unmockkAll()
+        unmockkStatic(ViewModelProviders::class)
     }
 
     @Test
