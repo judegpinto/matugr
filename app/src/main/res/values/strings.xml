@@ -5,21 +5,47 @@
     <string name="label_token_expiry">Token Expiry</string>
     <string name="button_fetch_token">Fetch New Token</string>
     <string name="button_logout">Logout</string>
-    <string name="token_status_valid">Valid</string>
+    <string name="title_tokens_valid">Valid Tokens</string>
+    <string name="info_tokens_valid">There are existing valid tokens and they are stored locally.</string>
+    <string name="key_token_expiration">Token Expiration Date</string>
     <string name="token_date_format">ddMMMyyyy h:mm:ssa</string>
-    <!--Display Error-->
+    <!--Authorization Error-->
     <string name="error_authorization">Authorization Failed</string>
-    <string name="error_no_refresh_token">No Refresh Token Stored. Current Local Token expires in: %1$s</string>
+    <!-- Refresh Token Error-->
+    <string name="title_no_refresh_token">No Refresh Token</string>
+    <string name="error_no_refresh_token">No Refresh Token Stored. Current Local Access Token will expire then login will be required.</string>
+    <!--Invalid Token Error-->
     <string name="error_invalid_fetched_token">Invalid Token Received: %1$s</string>
+    <string name="title_no_valid_token">No Valid Local Token</string>
     <string name="error_invalid_local_token">Invalid Local Token</string>
+    <!--Expired Token Error-->
+    <string name="title_expired_token">Local Token Expired</string>
+    <string name="info_expired_token">An access token is stored locally, but the expiration has passed. Fetch new one or logout.</string>
+    <!--OAuth Token Error-->
+    <string name="title_oauth_token_error">OAuth Token Error</string>
+    <string name="info_oauth_token_error">OAuth-specific error returned from token request</string>
+    <string name="key_oauth_error_code">OAuth Error Name</string>
+    <string name="key_oauth_error_description">OAuth Error Description</string>
+    <string name="key_oauth_error_uri">Error Uri</string>
+    <!--Http Token Error-->
+    <string name="title_http_token_error">Http Token Error</string>
+    <string name="info_http_token_error">While fetching token, the token request returned an http error.</string>
+    <string name="key_http_token_error_code">Http Code</string>
+    <string name="key_http_token_error_body">Http Body</string>
+    <!--Illegal State-->
+    <string name="title_illegal_state_error">Illegal State Error</string>
     <!--Loading-->
     <string name="loading_general_text">Please wait</string>
     <string name="loading_local_token">Fetching Cached Token</string>
     <string name="loading_fetch_new_token">Fetching New Token</string>
-    <string name="authorizing">Logging In…To Cancel, Click Below.</string>
+    <!--Authorizing-->
+    <string name="title_authorizing">Authorizing</string>
+    <string name="authorizing">Authorization launched in browser. Finish login or cancel.</string>
+    <string name="button_cancel_login">Cancel Login</string>
     <!--Idle-->
+    <string name="title_no_local_tokens">No Local Tokens</string>
     <string name="idle_state">There is no Token stored locally.\nLogin to obtain a token.</string>
     <!--Login-->
     <string name="button_login">Login</string>
-    <string name="button_cancel_login">Cancel Login</string>
+    <string name="key_refresh_token_error_access_token_expiration">Access Token Expiration</string>
 </resources>

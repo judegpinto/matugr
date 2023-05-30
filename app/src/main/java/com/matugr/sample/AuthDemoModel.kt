@@ -28,13 +28,16 @@ class AuthDemoModel @Inject constructor(
 
     suspend fun launchAuthorizationForToken(urlLauncherPort: UrlLauncherPort): UiToken {
         return withContext(Dispatchers.IO) {
+            // Example of how to add an additional parameter to the authorization request
+            val customParameters = mapOf("additional_param" to "true")
+
             val authRequest = AuthorizationRequest(
                 authDemoProperties.authUrl,
                 authDemoProperties.clientId,
                 AuthorizationResponseType.Code,
                 authDemoProperties.redirectUri,
                 authDemoProperties.scope,
-                customParameters = mapOf("additional_param" to "true")
+                customParameters = customParameters
             )
             val authorizationResponse = requestPort.performAuthorizationRequest(
                 authRequest,
@@ -57,7 +60,7 @@ class AuthDemoModel @Inject constructor(
     }
 
     suspend fun fetchAccessTokenFromRefreshToken(): UiToken {
-        val tokenInfo = getCurrentToken() ?: return UiToken.LocalTokenInvalid
+        val tokenInfo = getCurrentToken() ?: return UiToken.NoLocalToken
         val refreshToken = tokenInfo.refreshToken ?: return UiToken.NoRefreshToken(tokenInfo.expirationTime)
         val tokenResponse = requestPort.performTokenRequest(
             authDemoProperties.tokenUrl,
@@ -100,10 +103,21 @@ class AuthDemoModel @Inject constructor(
             }
             is TokenResult.Error ->  {
                 when(tokenResult) {
-                    is TokenResult.Error.OAuthError -> UiToken.TokenError(tokenResult.toString())
-                    is TokenResult.Error.HttpError -> UiToken.TokenError(tokenResult.toString())
-                    is TokenResult.Error.CannotTransformTokenJson -> UiToken.TokenError(tokenResult.toString())
-                    is TokenResult.Error.NoResponseBody -> UiToken.TokenError(tokenResult.toString())
+                    is TokenResult.Error.OAuthError -> UiToken.TokenError.OAuthError(
+                        oAuthErrorCode = tokenResult.oAuthErrorCode,
+                        errorDescription = tokenResult.errorDescription,
+                        errorUri = tokenResult.errorUri
+                    )
+                    is TokenResult.Error.HttpError -> UiToken.TokenError.HttpError(
+                        code = tokenResult.code,
+                        jsonBody = tokenResult.jsonBody
+                    )
+                    is TokenResult.Error.CannotTransformTokenJson -> UiToken.TokenError.IllegalState(
+                        tokenResult.toString()
+                    )
+                    is TokenResult.Error.NoResponseBody -> UiToken.TokenError.IllegalState(
+                        tokenResult.toString()
+                    )
                 }
             }
         }
