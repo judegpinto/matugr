@@ -45,7 +45,7 @@ class AuthDemoViewModel @Inject constructor(
             val currentToken = authDemoModel.getCurrentToken()
             viewStateFlow.value = when {
                 (currentToken == null) -> uiViewStateFactory.idle()
-                (currentToken.expirationTime > System.currentTimeMillis()) -> uiViewStateFactory.localTokenExpired(currentToken.expirationTime)
+                (currentToken.expirationTime < System.currentTimeMillis()) -> uiViewStateFactory.localTokenExpired(currentToken.expirationTime)
                 else -> uiViewStateFactory.displayToken(currentToken.expirationTime)
             }
         }
