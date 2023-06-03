@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
+import androidx.compose.ui.unit.dp
 import com.matugr.sample.data.ui.UiViewState
 import com.matugr.sample.data.ui.ViewAction
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,22 +47,25 @@ class AuthDemoActivity : AppCompatActivity() {
     fun AuthDemo() {
         val state = authDemoViewModel.viewState.collectAsState()
         when(val uiViewState = state.value) {
-            is UiViewState.Idle -> Idle()
+            is UiViewState.Idle -> Idle(uiViewState)
             is UiViewState.Loading -> Loading(uiViewState.message)
-            is UiViewState.Authorizing -> Authorizing()
-            is UiViewState.DisplayToken -> DisplayToken(uiViewState.status, uiViewState.expiresIn)
-            is UiViewState.DisplayError -> DisplayError(uiViewState.error)
+            is UiViewState.Authorizing -> Authorizing(uiViewState)
+            is UiViewState.DisplayToken -> DisplayToken(uiViewState)
+            is UiViewState.DisplayError -> DisplayError(uiViewState)
+            is UiViewState.DisplayTokenExpiredError -> DisplayTokenExpiredError(uiViewState)
         }
     }
 
     @Composable
-    fun Idle() {
+    fun Idle(uiViewState: UiViewState.Idle) {
         Column(
             modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = getString(R.string.idle_state),
-                fontSize = TextUnit(20.0f, TextUnitType.Sp),
-                textAlign = TextAlign.Center)
+            TitleAndInfo(
+                title = uiViewState.title,
+                titleColor = uiViewState.titleColor,
+                info = uiViewState.info
+            )
             LoginButton()
         }
     }
@@ -75,50 +81,118 @@ class AuthDemoActivity : AppCompatActivity() {
     }
 
     @Composable
-    fun DisplayToken(status: String, expiry: String) {
+    fun DisplayToken(uiToken: UiViewState.DisplayToken) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
+            TitleInfoData(
+                title = uiToken.title,
+                titleColor = uiToken.titleColor,
+                info = uiToken.moreInfo,
+                data = uiToken.errorElementMap
+            )
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = getString(R.string.label_token_status), color = Color.Gray, fontSize = TextUnit(15.0f, TextUnitType.Sp))
-                    Text(text = status, fontSize = TextUnit(20.0f, TextUnitType.Sp))
-                }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = getString(R.string.label_token_expiry), color = Color.Gray, fontSize = TextUnit(15.0f, TextUnitType.Sp))
-                    Text(text = expiry, fontSize = TextUnit(20.0f, TextUnitType.Sp))
-                }
-            }
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                Button(onClick = { authDemoViewModel.onAction(ViewAction.FetchNewToken) }) {
-                    Text(text = getString(R.string.button_fetch_token))
-                }
-                Button(onClick = { authDemoViewModel.onAction(ViewAction.Logout) }) {
-                    Text(text = getString(R.string.button_logout))
-                }
+                FetchNewTokenButton()
+                LogoutButton()
             }
         }
     }
 
     @Composable
-    fun Authorizing() {
+    fun Authorizing(uiViewState: UiViewState.Authorizing) {
         Column(
             modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = getString(R.string.authorizing), fontSize = TextUnit(20.0f, TextUnitType.Sp))
-            Button(onClick = { authDemoViewModel.onAction(ViewAction.ClickCancel) }) {
-                Text(text = getString(R.string.button_cancel_login))
-            }
+            TitleAndInfo(
+                title = uiViewState.title,
+                titleColor = uiViewState.titleColor,
+                info = uiViewState.info
+            )
+            CancelLoginButton()
         }
     }
 
     @Composable
-    fun DisplayError(error: String) {
+    fun DisplayError(uiViewState: UiViewState.DisplayError) {
         Column(
             modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = error, fontSize = TextUnit(20.0f, TextUnitType.Sp))
+            TitleInfoData(
+                title = uiViewState.title,
+                titleColor = uiViewState.titleColor,
+                info = uiViewState.errorInfo,
+                data = uiViewState.errorElementMap
+            )
             LoginButton()
+        }
+    }
+
+    @Composable
+    fun DisplayTokenExpiredError(uiViewState: UiViewState.DisplayTokenExpiredError) {
+        Column(
+            modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TitleInfoData(
+                title = uiViewState.title,
+                titleColor = uiViewState.titleColor,
+                info = uiViewState.errorInfo,
+                data = uiViewState.errorElementMap
+            )
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                FetchNewTokenButton()
+                LogoutButton()
+            }
+        }
+    }
+
+    @Composable
+    fun TitleInfoData(title: String, titleColor: Color, info: String, data: Map<String, String>) {
+        TitleAndInfo(title = title, titleColor = titleColor, info = info)
+        Metadata(errorMetadata = data)
+    }
+
+    @Composable
+    fun TitleAndInfo(title: String, titleColor: Color, info: String) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(text = title,
+                color = titleColor,
+                fontSize = TextUnit(30.0f, TextUnitType.Sp),
+                textAlign = TextAlign.Center)
+            Text(text = info,
+                fontSize = TextUnit(20.0f, TextUnitType.Sp),
+                textAlign = TextAlign.Center)
+        }
+    }
+
+    @Composable
+    fun Metadata(errorMetadata: Map<String, String>) {
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            items(errorMetadata.toList()) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                ) {
+                    Text(text = it.first,
+                        fontSize = TextUnit(15.0f, TextUnitType.Sp),
+                        textAlign = TextAlign.Center,
+                        color = Color.Gray,
+                    )
+                    Text(text = it.second,
+                        fontSize = TextUnit(20.0f, TextUnitType.Sp),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
         }
     }
 
@@ -126,6 +200,27 @@ class AuthDemoActivity : AppCompatActivity() {
     fun LoginButton() {
         Button(onClick = { authDemoViewModel.onAction(ViewAction.ClickLogin(activityUrlLauncher)) }) {
             Text(text = getString(R.string.button_login))
+        }
+    }
+
+    @Composable
+    fun LogoutButton() {
+        Button(onClick = { authDemoViewModel.onAction(ViewAction.Logout) }) {
+            Text(text = getString(R.string.button_logout))
+        }
+    }
+
+    @Composable
+    fun FetchNewTokenButton() {
+        Button(onClick = { authDemoViewModel.onAction(ViewAction.FetchNewToken) }) {
+            Text(text = getString(R.string.button_fetch_token))
+        }
+    }
+
+    @Composable
+    fun CancelLoginButton() {
+        Button(onClick = { authDemoViewModel.onAction(ViewAction.ClickCancel) }) {
+            Text(text = getString(R.string.button_cancel_login))
         }
     }
 }
