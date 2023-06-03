@@ -44,18 +44,7 @@ class AuthDemoModel @Inject constructor(
                 urlLauncherPort)
             Log.d(javaClass.simpleName, "Authorization Response: $authorizationResponse")
 
-            when(authorizationResponse) {
-                is AuthorizationResult.Success -> {
-                    Log.d(javaClass.simpleName, "Obtaining Token from Successful Auth Response")
-                    val tokenResponse = fetchAccessTokenFromCode(
-                        authorizationResponse.code, authorizationResponse.codeVerifier)
-                    processTokenResponse(tokenResponse)
-                }
-                is AuthorizationResult.Error -> {
-                    Log.i(javaClass.simpleName, "error: $authorizationResponse")
-                    UiToken.AuthorizationError(authorizationResponse.toString())
-                }
-            }
+            handleAuthorizationResult(authorizationResponse)
         }
     }
 
@@ -81,6 +70,23 @@ class AuthDemoModel @Inject constructor(
 
     suspend fun getCurrentToken(): TokenInfo? {
         return withContext(Dispatchers.IO) { authDao.getTokenInfo() }
+    }
+
+    private suspend fun handleAuthorizationResult(
+        authorizationResponse: AuthorizationResult
+    ): UiToken {
+        return when(authorizationResponse) {
+            is AuthorizationResult.Success -> {
+                Log.d(javaClass.simpleName, "Obtaining Token from Successful Auth Response")
+                val tokenResponse = fetchAccessTokenFromCode(
+                    authorizationResponse.code, authorizationResponse.codeVerifier)
+                processTokenResponse(tokenResponse)
+            }
+            is AuthorizationResult.Error -> {
+                Log.i(javaClass.simpleName, "error: $authorizationResponse")
+                UiToken.AuthorizationError(authorizationResponse.toString())
+            }
+        }
     }
 
     private suspend fun fetchAccessTokenFromCode(code: String, codeVerifier: String): TokenResult {
