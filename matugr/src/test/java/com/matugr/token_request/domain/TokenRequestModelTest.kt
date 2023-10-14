@@ -17,19 +17,15 @@
 package com.matugr.token_request.domain
 
 import com.matugr.token_request.external.TokenGrantType
-import com.matugr.token_request.networking.OAuthTokenErrorBody
+import com.matugr.token_request.external.TokenResult
 import com.matugr.token_request.networking.TokenNetworking
 import com.matugr.token_request.networking.TokenNetworkingResponse
-import com.matugr.token_request.networking.TokenResponseBody
 import com.matugr.tools.CoroutineTestRule
-import com.squareup.moshi.JsonAdapter
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import okio.BufferedSource
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -46,25 +42,20 @@ class TokenRequestModelTest {
     private val codeVerifier: String = "ValidCodeVerifier"
     private val customParameters: Map<String, String> = emptyMap()
 
-    private val accessToken = "access_token"
-    private val tokenType = "token_type"
-    private val refreshToken = "refresh_token"
-    private val expiresIn = 0L
-    private val scope = "scope"
-
     private val tokenNetworking: TokenNetworking = mockk()
-    private val tokenResponseBodyJsonAdapter: JsonAdapter<TokenResponseBody> = mockk()
-    private val oAuthTokenErrorBodyJsonAdapter: JsonAdapter<OAuthTokenErrorBody>  = mockk()
+    private val tokenSuccessResponseTransformer: TokenSuccessResponseTransformer = mockk()
+    private val httpErrorResponseTransformer: HttpErrorResponseTransformer = mockk()
 
     private lateinit var tokenRequestModel: TokenRequestModel
 
     @Before
     fun setup() {
         tokenRequestModel = TokenRequestModel(
-            tokenNetworking,
-            tokenResponseBodyJsonAdapter,
-            oAuthTokenErrorBodyJsonAdapter,
-            coroutinesTestRule.testDispatcherProvider)
+            tokenNetworking = tokenNetworking,
+            tokenSuccessResponseTransformer = tokenSuccessResponseTransformer,
+            tokenErrorResponseTransformer = httpErrorResponseTransformer,
+            dispatcherProvider = coroutinesTestRule.testDispatcherProvider
+        )
     }
 
     @Test
@@ -72,12 +63,15 @@ class TokenRequestModelTest {
     = coroutinesTestRule.testDispatcher.runBlockingTest {
         // given
         val authorizationCode = "AuthorizationCode"
-        val jsonBody: BufferedSource = mockk()
+        val tokenSuccessResponse: TokenNetworkingResponse.Success = mockk()
+        val tokenResult: TokenResult.Success = mockk()
         coEvery {
             tokenNetworking.tokenRequestWithCode(
                 tokenUrl, authorizationCode, clientId, codeVerifier, redirectUri, customParameters)
-        } returns TokenNetworkingResponse.Success(jsonBody)
-        every { tokenResponseBodyJsonAdapter.fromJson(jsonBody) } returns TokenResponseBody(accessToken, tokenType, refreshToken, expiresIn, scope)
+        } returns tokenSuccessResponse
+        coEvery {
+            tokenSuccessResponseTransformer.transformSuccessResponse(tokenSuccessResponse)
+        } returns tokenResult
 
         // when
         tokenRequestModel.performTokenRequest(
@@ -98,12 +92,15 @@ class TokenRequestModelTest {
     fun `when grant type is refresh token then token request made with refresh token parameters`()
             = coroutinesTestRule.testDispatcher.runBlockingTest {
         val refreshToken = "RefreshToken"
-        val jsonBody: BufferedSource = mockk()
+        val tokenSuccessResponse: TokenNetworkingResponse.Success = mockk()
+        val tokenResult: TokenResult.Success = mockk()
         coEvery {
             tokenNetworking.tokenRequestWithRefreshToken(
                 tokenUrl, refreshToken, clientId, customParameters)
-        } returns TokenNetworkingResponse.Success(jsonBody)
-        every { tokenResponseBodyJsonAdapter.fromJson(jsonBody) } returns TokenResponseBody(accessToken, tokenType, refreshToken, expiresIn, scope)
+        } returns tokenSuccessResponse
+        coEvery {
+            tokenSuccessResponseTransformer.transformSuccessResponse(tokenSuccessResponse)
+        } returns tokenResult
 
         tokenRequestModel.performTokenRequest(
             tokenUrl,
@@ -122,13 +119,20 @@ class TokenRequestModelTest {
     @Test
     fun `should include custom parameters in network request when provided with refresh token`()
             = coroutinesTestRule.testDispatcher.runBlockingTest {
+        // given
         val refreshToken = "RefreshToken"
-        val jsonBody: BufferedSource = mockk()
+        val customParameters = mapOf("custom_parameter" to "custom value")
+        val tokenSuccessResponse: TokenNetworkingResponse.Success = mockk()
+        val tokenResult: TokenResult.Success = mockk()
         coEvery {
             tokenNetworking.tokenRequestWithRefreshToken(
                 tokenUrl, refreshToken, clientId, customParameters)
-        } returns TokenNetworkingResponse.Success(jsonBody)
-        every { tokenResponseBodyJsonAdapter.fromJson(jsonBody) } returns TokenResponseBody(accessToken, tokenType, refreshToken, expiresIn, scope)
+        } returns tokenSuccessResponse
+        coEvery {
+            tokenSuccessResponseTransformer.transformSuccessResponse(tokenSuccessResponse)
+        } returns tokenResult
+
+        // when
         tokenRequestModel.performTokenRequest(
             tokenUrl,
             clientId,
@@ -137,6 +141,7 @@ class TokenRequestModelTest {
             customParameters
         )
 
+        // then
         coVerify {
             tokenNetworking.tokenRequestWithRefreshToken(
                 tokenUrl, refreshToken, clientId, customParameters
@@ -147,13 +152,20 @@ class TokenRequestModelTest {
     @Test
     fun `should include custom parameters in network request when provided with authorization code`()
             = coroutinesTestRule.testDispatcher.runBlockingTest {
+        // given
         val authorizationCode = "AuthorizationCode"
-        val jsonBody: BufferedSource = mockk()
+        val customParameters = mapOf("custom_parameter" to "custom value")
+        val tokenSuccessResponse: TokenNetworkingResponse.Success = mockk()
+        val tokenResult: TokenResult.Success = mockk()
         coEvery {
             tokenNetworking.tokenRequestWithCode(
                 tokenUrl, authorizationCode, clientId, codeVerifier, redirectUri, customParameters)
-        } returns TokenNetworkingResponse.Success(jsonBody)
-        every { tokenResponseBodyJsonAdapter.fromJson(jsonBody) } returns TokenResponseBody(accessToken, tokenType, refreshToken, expiresIn, scope)
+        } returns tokenSuccessResponse
+        coEvery {
+            tokenSuccessResponseTransformer.transformSuccessResponse(tokenSuccessResponse)
+        } returns tokenResult
+
+        // when
         tokenRequestModel.performTokenRequest(
             tokenUrl,
             clientId,
@@ -162,6 +174,7 @@ class TokenRequestModelTest {
             customParameters
         )
 
+        // then
         coVerify {
             tokenNetworking.tokenRequestWithCode(
                 tokenUrl, authorizationCode, clientId, codeVerifier, redirectUri, customParameters
