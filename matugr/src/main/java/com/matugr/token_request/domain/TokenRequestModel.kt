@@ -26,6 +26,7 @@ import com.matugr.token_request.networking.TokenNetworkingResponse
 import com.matugr.token_request.networking.TokenResponseBody
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.withContext
+import java.lang.NullPointerException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,9 +36,9 @@ import javax.inject.Singleton
 @Singleton
 internal class TokenRequestModel @Inject constructor(
     private val tokenNetworking: TokenNetworking,
-    private val tokenResponseBodyJsonAdapter: JsonAdapter<TokenResponseBody>,
-    private val tokenTokenErrorResponseJsonAdapter: JsonAdapter<OAuthTokenErrorBody>,
-    private val dispatcherProvider: DispatcherProvider
+    private val tokenErrorResponseTransformer: HttpErrorResponseTransformer,
+    private val dispatcherProvider: DispatcherProvider,
+    private val tokenSuccessResponseTransformer: TokenSuccessResponseTransformer
 ) : TokenRequestPort {
 
     override suspend fun performTokenRequest(
@@ -106,34 +107,14 @@ internal class TokenRequestModel @Inject constructor(
     }
 
     private fun processSuccessfulNetworkResponse(success: TokenNetworkingResponse.Success): TokenResult {
-        val tokenResponse = tokenResponseBodyJsonAdapter.fromJson(success.jsonBody)
-            ?: return TokenResult.Error.CannotTransformTokenJson(success.jsonBody.readUtf8())
-        return TokenResult.Success(
-            tokenResponse.accessToken,
-            tokenResponse.tokenType,
-            tokenResponse.refreshToken,
-            tokenResponse.expiresIn,
-            tokenResponse.scope
-        )
+        return tokenSuccessResponseTransformer.transformSuccessResponse(success)
     }
 
     private fun processFailedNetworkResponse(failure: TokenNetworkingResponse.Failure): TokenResult.Error {
         return when(failure) {
             is TokenNetworkingResponse.Failure.NoResponseBody -> TokenResult.Error.NoResponseBody
-            is TokenNetworkingResponse.Failure.HttpError -> {
-                val oauthErrorBody = tokenTokenErrorResponseJsonAdapter.fromJson(failure.jsonBody)
-                if (oauthErrorBody == null) {
-                    TokenResult.Error.HttpError(failure.responseCode, failure.jsonBody.readUtf8())
-                } else {
-                    val tokenOAuthErrorCode = convertFromTokenOAuthNetworkingError(oauthErrorBody.oAuthErrorCodeBody)
-                    TokenResult.Error.OAuthError(
-                        tokenOAuthErrorCode,
-                        oauthErrorBody.errorDescription,
-                        oauthErrorBody.errorUri
-                    )
-                }
-            }
+            is TokenNetworkingResponse.Failure.HttpError ->
+                tokenErrorResponseTransformer.transformHttpResponseError(failure)
         }
     }
-
 }
