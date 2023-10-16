@@ -6,8 +6,8 @@ plugins {
 
 ext {
     PUBLISH_GROUP_ID = 'io.github.judegpinto'
-    PUBLISH_VERSION = '0.1.0'
-    PUBLISH_VERSION_CODE = 1
+    PUBLISH_VERSION = '0.2.0'
+    PUBLISH_VERSION_CODE = 2
     PUBLISH_ARTIFACT_ID = 'matugr'
     PUBLISH_DESCRIPTION = 'OAuth 2 Android Client SDK'
     PUBLISH_URL = 'https://github.com/judegpinto/matugr'
@@ -20,8 +20,6 @@ ext {
     PUBLISH_SCM_DEVELOPER_CONNECTION = 'scm:git:ssh://github.com/judegpinto.git'
     PUBLISH_SCM_URL = 'https://github.com/judegpinto/matugr/tree/master'
 }
-
-apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
 
 android {
     compileSdk 33
@@ -52,6 +50,11 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
+        }
+    }
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
         }
     }
     namespace 'com.matugr'
@@ -100,3 +103,5 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"

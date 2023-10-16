@@ -47,6 +47,10 @@ captures/
 # Android Studio 3 in .gitignore file.
 .idea/caches
 .idea/modules.xml
+# Miscellaneous ignored files
+.idea/kotlinc.xml
+.idea/misc.xml
+.idea/inspectionProfiles/Project_Default.xml
 # Comment next line if keeping position of elements in Navigation Editor is relevant for you
 .idea/navEditor.xml
 
@@ -83,3 +87,6 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+# jenv
+.java-version
