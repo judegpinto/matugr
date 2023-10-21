@@ -23,7 +23,7 @@ The consuming client is responsible for:
 
 ### Gradle Setup
 ```
-implementation 'io.github.judegpinto:matugr:0.2.0'
+implementation 'io.github.judegpinto:matugr:0.2.1'
 ```
 
 ### Required Property Setup (Sample App only)
