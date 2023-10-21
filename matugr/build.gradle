@@ -6,8 +6,8 @@ plugins {
 
 ext {
     PUBLISH_GROUP_ID = 'io.github.judegpinto'
-    PUBLISH_VERSION = '0.2.0'
-    PUBLISH_VERSION_CODE = 2
+    PUBLISH_VERSION = '0.2.1'
+    PUBLISH_VERSION_CODE = 3
     PUBLISH_ARTIFACT_ID = 'matugr'
     PUBLISH_DESCRIPTION = 'OAuth 2 Android Client SDK'
     PUBLISH_URL = 'https://github.com/judegpinto/matugr'
