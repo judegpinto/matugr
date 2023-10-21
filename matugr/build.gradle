@@ -77,6 +77,13 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
 
+    // okio
+    implementation("com.squareup.okio:okio") {
+        version {
+            strictly '3.6.0' // free of CVE-2023-3635
+        }
+    }
+
     // Moshi
     implementation "com.squareup.moshi:moshi:$moshi_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
