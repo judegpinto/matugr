@@ -31,22 +31,10 @@ jobs:
       with:
         arguments: :app:assemble
         
-    - name: Library Unit Tests
+    - name: Library Unit Tests w/ Report
       uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
       with:
-        arguments: :matugr:jacocoTestReport
-
-#    - name: generate report
-#      uses: actions/upload-artifact@v4
-#      with:
-#        name: report
-#        path: matugr/build/reports/jacoco/jacocoTestReport
-#
-#    - name: Download Test Reports Folder
-#      uses: actions/download-artifact@v4
-#      with:
-#        name: report
-#        path: matugr/build/reports/jacoco/jacocoTestReport
+        arguments: :matugr:jacocoTestReport # depends on testDebugUnitTest
 
     - name: Upload Test Report
       uses: codecov/codecov-action@v3
