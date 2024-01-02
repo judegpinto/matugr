@@ -1,0 +1,56 @@
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    def filteredFiles = [
+            '**/Dagger*Component*.class',
+            '**/*Module_*Factory.class',
+            '**/*Module_Contribute*.class',
+            '**/*_MembersInjector.class',
+            '**/*$InjectAdapter.class',
+            '**/*$ModuleAdapter.class',
+            '**/*$ViewInjector*.class',
+            '**/*_Factory.class',
+            '**/matugr/di/**',
+
+            '**/*_ViewBinding*.class',
+            '**/databinding/*Binding*.class',
+            '**/DataBinderMapper*.class',
+            '**/DataBindingTriggerClass.class',
+
+            '**/*Dao_Impl*.class',
+            '**/*Database_Impl*.class',
+
+            '**/androidx*/*',
+            '**/BR.class',
+            '**/*$$Parcelable*.class',
+            '**/*$Creator*.class',
+            '**/BuildConfig.class',
+
+            'jdk.internal.*',
+
+            '**/*JsonAdapter.class',
+
+            '**/*Test.class',
+    ]
+    def kotlinFileTree = fileTree(
+            dir: "${project.rootDir}",
+            includes: ["matugr/build/tmp/kotlin-classes/debug/com/matugr/**"],
+            excludes: filteredFiles
+    )
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories.setFrom(files([mainSrc]))
+    classDirectories.setFrom(files([kotlinFileTree]))
+    executionData.setFrom(
+            fileTree(
+                    dir: "$buildDir",
+                    includes: [
+                            "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+                    ]
+            )
+    )
+}
