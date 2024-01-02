@@ -29,7 +29,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
             '**/*$$Parcelable*.class',
             '**/*$Creator*.class',
             '**/BuildConfig.class',
-            
+
             'jdk.internal.*',
 
             '**/*JsonAdapter.class',
@@ -38,7 +38,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
     ]
     def kotlinFileTree = fileTree(
             dir: "${project.rootDir}",
-            includes: ["/**/build/tmp/kotlin-classes/debug/com/matugr/**"],
+            includes: ["build/tmp/kotlin-classes/debug/com/matugr/**"],
             excludes: filteredFiles
     )
     def mainSrc = "${project.projectDir}/src/main/java"
@@ -49,7 +49,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
             fileTree(
                     dir: "$buildDir",
                     includes: [
-                            "**/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+                            "build/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
                     ]
             )
     )
