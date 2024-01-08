@@ -17,6 +17,7 @@
 package com.matugr.token_request.domain
 
 import com.matugr.token_request.external.TokenGrantType
+import com.matugr.token_request.external.TokenOAuthErrorCode
 import com.matugr.token_request.external.TokenResult
 import com.matugr.token_request.networking.TokenNetworking
 import com.matugr.token_request.networking.TokenNetworkingResponse
@@ -26,6 +27,8 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import okio.BufferedSource
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -180,5 +183,63 @@ class TokenRequestModelTest {
                 tokenUrl, authorizationCode, clientId, codeVerifier, redirectUri, customParameters
             )
         }
+    }
+
+    @Test
+    fun `Should return no response body error when no body in network response`()
+        = coroutinesTestRule.testDispatcher.runBlockingTest {
+        // given
+        val authorizationCode = "AuthorizationCode"
+        val customParameters = mapOf("custom_parameter" to "custom value")
+        val tokenNetworkingResponse = TokenNetworkingResponse.Failure.NoResponseBody
+        val tokenResult = TokenResult.Error.NoResponseBody
+        coEvery {
+            tokenNetworking.tokenRequestWithCode(
+                tokenUrl, authorizationCode, clientId, codeVerifier, redirectUri, customParameters)
+        } returns tokenNetworkingResponse
+
+        // when
+        val result = tokenRequestModel.performTokenRequest(
+            tokenUrl,
+            clientId,
+            redirectUri,
+            TokenGrantType.AuthorizationCode(authorizationCode, codeVerifier),
+            customParameters
+        )
+
+        // then
+        assertEquals(tokenResult, result)
+    }
+
+    @Test
+    fun `Should return transformed error when http error received in network response`()
+        = coroutinesTestRule.testDispatcher.runBlockingTest {
+        // given
+        val refreshToken = "RefreshToken"
+        val mockResponseBody: BufferedSource = mockk()
+        val tokenErrorResponse = TokenNetworkingResponse.Failure.HttpError(
+            responseCode = 500,
+            jsonBody = mockResponseBody
+        )
+        val tokenResult = TokenResult.Error.OAuthError(TokenOAuthErrorCode.InvalidGrant, null, null)
+        coEvery {
+            tokenNetworking.tokenRequestWithRefreshToken(
+                tokenUrl, refreshToken, clientId, customParameters)
+        } returns tokenErrorResponse
+        coEvery {
+            httpErrorResponseTransformer.transformHttpResponseError(tokenErrorResponse)
+        } returns tokenResult
+
+        // when
+        val result = tokenRequestModel.performTokenRequest(
+            tokenUrl,
+            clientId,
+            redirectUri,
+            TokenGrantType.RefreshToken(refreshToken),
+            customParameters
+        )
+
+        // then
+        assertEquals(tokenResult, result)
     }
 }
