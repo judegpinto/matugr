@@ -1,4 +1,7 @@
 # MATUGR
+![Github Actions](https://github.com/judegpinto/matugr/actions/workflows/gradle.yml/badge.svg)
+[![codecov](https://codecov.io/github/judegpinto/matugr/coverage.svg?branch=main)](https://codecov.io/gh/judegpinto/matugr)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.judegpinto/matugr)
 
 ## What is Matugr?
 Matugr is an Android client-enabling implementation of OAuth 2. It is Kotlin-based and 
